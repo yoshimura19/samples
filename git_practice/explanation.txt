@@ -1,0 +1,3 @@
+_projectはお互いを参照している(Bob_projectはAlice_projectのclone)
+
+_project_newは共有gitフォルタ(今は練習で一つ上のディレクトリにあるkyoyuをBob,Aliceがgit cloneして作業している)

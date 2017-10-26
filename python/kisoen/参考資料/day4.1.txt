@@ -1,0 +1,129 @@
+□正規表現
+正規表現＝有限オートマトン
+
+Q.正規表現を用いて行う処理として最も適当でないもの
+A.２本の塩基配列のペアワイズアラインメントを計算し SP スコアが最も高いアラインメントを求める
+Python をはじめとして最近の言語に組み込まれている正規表現検索ライブラリはもともとの正規表現を大きく超える能力を持っていて、 ヨットで世界一周できるのと同じ意味でペアワイズアラインメントも本当は計算できますが、実用的には意味はありません。
+
+
+Q.正規表現にはいろいろな亜種があるがWikipedia の正規表現の項目 を 参照し、POSIX 規格では
+simple regular expression と basic regular expression (BRE)
+extended regular expression
+
+
+Q.正規表現で判定できないもの
+A.英語のアルファベットに対して回文
+
+
+□決定性有限オートマトン(DFA:Deterministic Finite Automaton）
+ある状態から入力に対する枝は１つづつ
+
+□非決定性有限オートマトン(NFA:Non-deterministic Finite Automaton)
+同じ入力を示す枝があってもよい（重複を許す）
+入力なしの枝のεが許可されている
+ボールを分裂させて，色々なところに置かれている状態を許す
+
+□非決定性オートマトンから決定性オートマトンへの変換
+非決定性でn →決定性2^n (あるかないか)に変換出来る．（max 2^n）
+上級:5
+
+
+□単なる文字列と文字クラスとオートマトンの対応
+正規表現とは：非決定性有限オートマトンを記述する言語
+文字クラス
+G → E,O → T   　     #“G[EO]T”　　　どちらか
+A~Z → A~Z → 4 → 8    #“[A-Z][A-Z]48”  まとめて
+G → E, O以外 → T      #”G[^EO]T”   以外
+#範囲一括指定やそれ以外を複数書いても良い  #”[A-Za-z_][0-9]”
+#.(ピリオド)で任意の一文字を表す
+
+
+Q.A.ハイフンを最初か最後にくっついた時のみ、何の意味もない文字と認識され、正規表現対象に加える事が出来る。
+最初と最後以外でハイフン(-)を範囲記号ではなく単なる１文字として扱いたいときには "-" のようにエスケープする必要があります。
+
+□正規表現の並列
+(X|Y|Z) #”l”で幾つかの正規表現を並列
+
+Q. D(SN(F|GTS)|([B-D]S|BH)|Z)S　で辞書順最小
+A.
+D (SN(F|GTS) | ([B-D]S|BH)|Z) S
+D (SNF | BH | Z) S
+DBHS
+
+(ABD | DEF | HIJK | KL) ??間違い？
+
+□正規表現で繰り返し
+“Io?T” IoTやITにマッチ　“X?”はXが0または1回出現にマッチ
+“GOOO*L”          #*は0回以上の繰り返し
+                  #”GOOL”,”GOOOL”,”GOOOOO…L”にマッチ
+“X+”            #+は1回以上
+“(AB)+”        #AB,ABABABAB,ABABABABABAB,…
+
+
+□正規表現のマッチをPythonで調べてみる
+>>> import re   #regular expression
+>>> pat = re.compile(“STR”)   #受けとった正規表現を使って非決定性オートマトンをつくる　compile
+			#時間がかかるのでこのオートマトンを使い続けるのがよい
+>>> pat.match(“a”)   #True Falseではなくmatch objectを返す
+>>> pat.match(“a”) != None  #matchしないということはなかったか？
+True
+>>> pat.match(“000STR”) != None  #matchは受理状態に辿りついたらokとする
+#後ろについててもok “STR000” 前だと”000STR” Sの遷移が受け付けられないので×
+
+>>> pat = re.compile("G[EO]T")    #選択
+>>> pat.match("GET") != None
+True
+
+>>> pat = re.compile("[A-Z][a-z]")   #範囲
+>>> pat.match("Aa") != None
+True
+
+>>> pat = re.compile(“[A-Za-z][A-Za-z][A-Za-z][0-9][0-9]”)  #数字
+>>> pat.match("AkB48") != None
+True
+
+>>> pat = re.compile("BRCA[^3-90]")      #以外
+>>> pat.match("BRCA2") != None
+True
+
+>>> pat = re.compile(“CYP..[0-9]”)    #.が１文字任意
+>>> pat = re.compile(“CYP(3A4|3A5|2D6)”)   #並列
+>>> pat = re.compile(“CYP(2(D6|C8|C9)|2(A4|A5)|1(A1|A2))”)   #（）で並列のネストにできる
+>>> pat.match(“CYP1A2”) != None
+True
+
+>>> pat = re.compile(“TR?P53”)    #R?でRがあってもなくてもよい
+>>> pat = re.compile(“H.*A”)      #*は0回以上の繰り返し　任意の数がn回登場しAでおわる
+>>> pat = re.compile(“[A-Z]+[0-9]+”)  #+一回以上
+
+
+####compileとmatchを同時に行うre.matchもよく使われている###
+import re
+p = re.compile(正規表現)
+r = p.match(検索対象文字列)
+と等価な記法として
+import re
+r = re.match(正規表現，検索対象文字列)
+
+
+##matchとsearch
+match関数は先頭からマッチする，searchは任意の位置からマッチするか
+r = re.search(“STR”, “AAAASTRBBBBB”)
+あるいは
+p = re.compile(“STR”)
+r = p.search(“AAASTRBBBBB”)
+
+
+##group
+マッチオブジェクトに対して’.group(n)’を呼び出すと
+正規表現中の左からn番目の左括弧から，対応する右括弧までの文字列を取得することができる．
+‘.group(0)’はマッチした正規表現に対応する文字列全部
+p = re.compile(“STR”)
+r = p.search(“AAAASTRBBBBBB”)
+print r.group(0)
+はSTRを表示
+p = re.compile(“A(STR)B”)
+print r.group(1)
+もSTRを表示
+
+

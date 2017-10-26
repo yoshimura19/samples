@@ -1,0 +1,145 @@
+○クラス〜モジュール
+□Pythonのクラス(イントロ)
+・データと、そのデータを取り扱う関数群をまとめたもの
+・python以外の言語のclassとほぼ同じ
+
+クラスの中に実体を作ることができる（実体のことをインスタンスという）
+
+クラスを実体化したインスタンスは表示方法が決まってないのでprintではアドレスなどがひょうじされる。
+
+実装例
+30 class Foo:         #関数定義や変数定義はクラスの中で出来る                                   
+31    def __init__(self, name):      #第一引数には自インスタンスaが渡される                      
+32        self.name = name           #二つ目以降はuserが渡したもの                             
+33
+34    def hello(self):
+35        print "Hello, " + self.name + "!"
+36
+37    def goodbye(self):
+38        print "Good-bye, " + self.name + "!"
+39
+40
+41a = Foo("hogehoge")  #クラス名から実体（instance）を生成する 
+
+
+
+class Hogehoge:
+   def __init__(self, value):
+       self.value = value
+
+   def plus(self, value):
+       return self.value + value
+
+
+class Mathconst:
+    PI = 3.14159
+    e = 2.71828
+
+
+Q.コンストラクタのメソッド名
+__init__
+
+Q. _ （アンダースコア×１）ではじまるが、__ （アンダースコア×２）からは始まらない _value のような変数がクラス内にある場合
+A. クラスの外部からアクセスするとエラーが発生する。
+
+
+□pythonのモジュール
+関数やクラスを他のプログラムから使う
+>>> import hoge
+>>> hoge.greeting("foo")    #モジュール名.
+Hello, foo!
+>>> from hoge import greeting   #ある関数だけ使うのでそれのみ~.というプレックスなしでアクセス
+>>> greeting("foo")
+Hello, foo!
+>>> from hoge import *     #全の変数、関数名を〜.というプレックスなしでアクセス
+>>> greeting("foo")
+Hello, foo!
+
+
+datetimeモジュール　
+>>> d = datetime.date(2010, 7, 4, 12, 15, 58)
+>>> print(d)
+2010-07-04 12:15:58
+
+
+□pythonのモジュール2
+>>> import sys
+>>> sys.path
+でパスが見れ、リストの前の方から読み込み。(test.pyというモジュールはあるので自分で作るとconflict)
+
+.pyo  #最適化済みのpythonソースコード
+.pyc  #コンパイル済みのpythonソースコード
+
+Python のインタプリタが import 文を解釈しモジュールを読み込むときに参照する ディレクトリのリストはどんな変数に格納されているか？ モジュール名付きの変数名で答えよ。
+sys.path
+
+
+
+□Pythonのモジュールはどこに保存されているのか？
+標準モジュールの場所
+・sys.path  #importされたモジュールを探すディレクトリ一覧
+・site_packages  #自分で追加インストールしたモジュールが入る
+・PYTHONPATH    #独自ディレクトリを指定する場合
+eggファイル　ディレクトリであるかのように見せる（開くとpythonのプログラム群）
+
+/tmp/testmodule
+cd /tmp/testmodule
+testtest.py
+
+sys.path.append(“/tmp/testmodule”)    #追加する事もできる
+export PYTHONPATH=/tmp/testmodule    #一時的にディレクトリを追加
+export PYTHONPATH=/tmp/testmodule: /tmp/foo:/tmp/bar   #一時的にモジュールを参照するディレクトリを追加
+前から入るので、インストール時にconflictしている場合はsys.pathでどの順に読み込まれているかcheck!
+
+
+Q.ホームディレクトリの下にインストールした Python モジュールを import した際に読み込ませたいが、 どのような環境変数にディレクトリ名を登録すれば良いか。
+A. PYTHONPATH
+
+ちなみに
+複数のディレクトリを設定したり、セットを切り替えたりする必要が無い場合には pip install --user コマンドなどを使ってホームディレクトリの下にモジュールをインストールする方法が簡便です。
+
+
+
+□Python Package Index (PyPI)の使い方　（ぱいぴーあい）
+https://pypi.python.org/pypi
+・説明事項,
+setup.py  install_requires = ライブラリの要求versionが書いてある #モジュールの中に
+
+pip list    #現在インストールされているパッケージ一覧
+pip freeze  #-v でversion
+
+pip install パッケージ名   #pypiのサイトからダウンロードしてインストールが行われる。
+(極稀にeasy_install パッケージ名（昔使われていた)でないと入らないものもある)
+
+pip freeze | grep ~ でバージョンを探せる
+pip install pyparsing==1.7.7  #versionを指定してダウンロード
+
+pip install fasta
+#condaを使ってインストールすべき。(anacondaで入れる）
+
+#C言語のプログラムとリンクしたプログラムは環境が違うとコンパイルが通らない可能性がある。
+#py~で始まるモジュールはpythonだけで作ってあることが多い。
+
+初級問題 (一番下の問いが？)
+Q. Python モジュールについて、egg ファイルとは何をするファイルか？
+zip/tar書庫のようなものでモジュールに必要なファイルやメタデータを一式まとめて書庫のようなファイルとしたもの
+
+Q. openpyxl モジュールのバージョン 2.3.5 をインストールしたいが最新版ではない。 pip install []
+openpyxl==2.3.5
+
+Q. インストールされている Python モジュールのバージョンを調べたい。pip []
+pip list
+pip freeze 
+pip help list ??
+
+
+中級問題
+virtualenvの使い方
+virtualenv を用いてモジュール群を切り替えたい。 以下のコマンドを用いて環境を作った。
+$ cd
+$ pwd
+/home/myid
+$ virtualenv test
+
+activateするには、
+source /home/myid/test/bin/activate

@@ -1,0 +1,53 @@
+意味が分かるラベルでない場合減点0.1
+(prob1に関しては問題でX,Yを指定しているため減点なし)
+ □prob1(1点
+(a) scatter plot 				0.2
+(b) Regress by ‘lm’ function			0.2
+(c) (b) by matrix algebra			0.3
+(d) (b) by numerically minimizing SSE		0.3
+
+
+□prob2(1点
+Chapter 6 Exercises 2
+‘iris’ data
+(1) regress ‘Sepal.Length’ on ’Sepal.Width	0.4
+for the first 50 observations
+(summaryは要求していない)
+説明変数と被説明変数逆(-0.2) (2人)
+
+(2) scatter plot with 
+regression line					0.2
+confidence bands				0.2
+prediction bands				0.2
+
+
+□prob3(1点
+(a) scatter plot literacy rate(x-axis) GDP (y-axis)	0.1
+単回帰した時にどのような問題がでるか？コメント0.1点
+(b) take log on GDP, and make a scatter plot		0.1
+(c) Regress log of GDP on literacy rate			0.2
+係数、標準誤差、t-統計量、係数は有意にゼロでない？ それぞれ0.1減点
+(d) Overlay a prediction band				0.1
+(e) 残差をプロット。コメント(0.1)				0.2
+(f) Q-Q plot for residuals. Normal?			0.1
+(g) 他にもう１つ説明変数を加えるなら何を入れる？			0.2
+
+
+### HW2 採点ガイドライン
+
+- 大体、前回と同じ感じでお願いします。１問１点です。
+- 問題の性格上減点主義になってしまって楽しくないので
+　「素晴らしいコードにはボーナスを」との希望が学生からありました。
+　特に良いコードがあれば気に入ったものを１〜２点教えてください。
+　(後でこちらで加点します。)
+
+
+（採点伝達事項）
+- いつも通り、各１点で３点満点としてください。
+- Ludmilla さん　および　Kennard さんは若干（1.5〜３時間ほど）
+　遅れての提出ですので得点は９５％として下さい。
+- 3(g)はオープンエンドの質問なので、意味のある説明変数の
+　アイデアが書いてあればOKです。
+
+その他、不明な点があれば何でもご連絡下さい。
+それでは、よろしくお願い致します。

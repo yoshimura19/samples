@@ -1,0 +1,106 @@
+
+□正規表現の特殊文字とその他の細かい話
+その他の特殊文字
+^  #文字列の先頭
+$  #文字列の最後
+文字列の全体を一致させたいとき
+>>> pat = re.compile(“[A-Z]+[0-9]+”) >>> pat2 = re.compile(^“[A-Z]+[0-9]+$”)
+>>> pat.match(“CYP1A1”) != None
+True
+>>> pat2.match(“CYP1A1”) != None
+False
+>>> pat = re.compile(r”\A[A-Z]+[0-9]+$”\Z)  #\A文字列の先頭、\Z文字列の終端
+
+
+□正規表現の方言 (よく使う文字クラスの省略文字がある)
+\d  [0-9]
+\s  [\t\n\r\f\v]  #見えない文字を\sで表す
+\S  [^\t\n\r\f\v] 
+\w  任意の英数文字および下線とマッチします；これは、集合 [a-zA-Z0-9_] と同じ意味です。
+\W  任意の非英数文字とマッチします；これは集合 [^a-zA-Z0-9_] と同じ意味
+
+Q. \d\w は＆とはマッチしない 
+
+・貪欲法
+>>> pat = re.compile(r“<.*>”)     #.任意の文字列の正規表現 (貪欲法になっている)
+>>> r = pat.search(“<abc> <def>”)
+>>> r != None
+True
+>>> r.group(0)
+<>で最大の長さのものを探してくる
+ >>> pat = re.compile(r“<.*?>”)     #.任意の文字列の正規表現(逆（出来るだけ小さく）)
+
+
+
+うわ、これ便利かも。ターミナルで「pbcopy」「pbpaste」なるものがあったのですね。これ、クリップボードの中身（に｜から）コピー、貼り付けするためのものです。
+
+たとえばターミナルでの出力をクリップボードにコピーするには・・・。
+
+$ ls -la | pbcopy
+
+逆にクリップボードの中身をターミナルで出力したい場合はこちら。
+
+pbpaste > text.txt
+
+
+中級問題
+r"(^AB|C)D(E|F$)"　　←　( ^AB|C ) D (E| F$)
+ABDENC ○
+ABDFC　×
+ABDX　×
+CDEX　○
+CDFX　×
+NCDEX　○
+NCDFX　×
+NABDE　×
+NABDF　×
+
+
+
+
+□正規表現を使った情報の抜き出しと文字列置換
+emailの正規表現の特集 http:
+pythonの場合
+r”(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[[a-zA-Z0-9-].]+$)”
+#\.の.は任意でなく”.” [.]も文字
+
+curl http://www.ddbj.nig.ac.jp/faq/faq-j.html   #取得
+curl http://www.ddbj.nig.ac.jp/faq/faq-j.html | less
+/FTP； /faq_item              　　　　　　　　　　　 #語を検索
+
+#抜き出したいところ(の中身)
+<div class="faq_item"><h5><a name=37125></a>新しくアカウント登録をおこなったが、メールが届きません<span class="tag"> Pipeline</span>
+
+
+#正規表現に
+<div class="faq_item"><h5><a name=\d+></a>(.*?)<span class="tag"> Pipeline</span>
+#変えた所
+・nemeのあとを\d+　任意の数字列の連続
+・Questionのとこを任意の文字列（greedyだとQ2つとるかもしれないので?で少ない方から）
+#""が中にあるので''にor \でescapeする
+
+#実行
+curl http://www.ddbj.nig.ac.jp/faq/faq-j.html | python extract_question.py
+
+#reモジュールの文字列置換
+re.sub(pattern, repl, string, count=0, flags=0)
+
+
+#プログラムextract_question.py
+import re
+
+pat = re.compile("<div class=\"faq_item\"><h5><a name=\d+></a>(.*?)<span")
+
+number = 1
+try:
+    while True:
+        s = raw_input()
+        result = pat.search(s)
+        if result != None:
+            question_str = result.group(1)
+            replaced_string = re.sub(r'"(.*?)"', r'「\1」', question_str) #\1は1つ目の()中と交換                  
+            print "%4d: %s" % (number, replaced_string)  #resultは0が一致した文字列全体                                   
+            number += 1
+except EOFError, e:                #1,..,nは一致した文字列のn番目の()の部分                                               
+    pass
+

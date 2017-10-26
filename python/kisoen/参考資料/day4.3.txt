@@ -1,0 +1,108 @@
+○CSV-TSV-JSONファイルの扱い
+
+□CSV(Comma-Separated Value)ファイルとその扱い
+・カンマで区切って値の列を返す。カンマがあるときには(無いときでも気が向いたら)””でくくる。
+・一行目はヘッダー
+
+CSVファイルの注意点
+・値に改行\r やカンマ, “を含めたい時の業界標準を誰も守ってないので調整の必要がある。
+
+データ
+BioGPS  ・http://biogps.org/downloads/
+サイトのファイルの”アドレスをコピー” wget http://plugins.biogps.org/download/gnf1h-gcrma.zip
+
+less ファイル名.csv
+less -SR ファイル名.csv  #折り返しを止めて見る
+
+#CSVを見るアプリ
+csvkit　#インストール済み
+csvlook ファイル名.csv
+
+
+□TSV(Tab-Separated Values(タブ区切りファイル))
+・ソフトウェアごとの挙動の違いが少ない
+文字列にTabを入れたい人は滅多にいない
+
+less -SR -x 20    #合わせる
+・csv,tsvはセルに型はない
+・罫線、左寄せ、右寄席センタリングもできな
+その他
+・ヘッダーがあるかないかを自動判別する方法はない
+
+
+
+□JSON/XML/YAMLなどのシリアライズフォーマット
+JSON(JavaScript Object Notation)
+・データをテキスト化して表す方法の１つ（Javascriptとして有効な文）
+・Pythonで言うところのbool,int,str,dictや配列だけを使って表すことのできるデータ
+（色んな言語でライブラリなどで読み込める）
+
+XML(eXtensible Markup Language)
+・開きタグと閉じタグで囲ってデータの階層関係を表すようなデータのテキスト化方法
+(昔は流行っていたが最近はJSONに取って代わられた)
+<books>
+ <book>
+  <title>    </title>
+	…
+	…
+　</book>
+</books>
+
+
+利点/
+・JSONは型の指定は出来ない
+・XMLは型の指定ができて、スキーマできる（型が違うときはエラーを出す事ができる）
+
+
+おまけ
+YAML
+・JSONを含む上位互換の企画
+・コメントできる、マルチラインテキスト
+・インデントによる階層関係
+
+
+Jasonの例
+{
+  "firstName": "John",
+  "lastName": "Smith",
+  "isAlive": true,
+  "age": 25,
+  "address": {
+    "streetAddress": "21 2nd Street",
+    "city": "New York",
+    "state": "NY",
+    "postalCode": "10021-3100"
+  },
+  "phoneNumbers": [
+    {
+      "type": "home",
+      "number": "212 555-1234"
+    },
+    {
+      "type": "office",
+      "number": "646 555-4567"
+    },
+    {
+      "type": "mobile",
+      "number": "123 456-7890"
+    }
+  ],
+  "children": [],
+  "spouse": null
+}
+
+
+test62初級
+{
+"John": 1234,
+"Jeff": 9999
+}
+
+
+
+
+test62
+["airplane", "car", "bike"]
+辻 真吾
+[4, 9, 2, 3]
+{"John": "1234", "Jeff": "9999"}

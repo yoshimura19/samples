@@ -1,0 +1,12 @@
+#include <iostream>
+using namespace std;
+static int const MAX = 100;
+static int const INFTY = (1 << 21);
+static int const WHITE = 0;
+static int const GRAY = 1;
+static int const BLACK = 2;
+
+int n, M[MAX][MAX];
+
+int prim() {
+  

@@ -1,0 +1,131 @@
+#!/usr/bin/env python
+と書くと、directoryで./ファイル名で実行できる
+
+□関係データベース(Relationl Database)とは
+・リレーショナルデータベース　リレーショナルモデル（表形式）
+・オブジェクトデータベース　オブジェクトデータモデル（JSONみたいなデータ)
+
+Q.以下のデータベースエンジンのうち、関係データベースを扱っていないものを選べ。 必要なら Web 検索をしてよい。
+A.Mongo DB
+
+
+localhost:day5 serubantesu2$ mysql -u anonymous -h asiadb.ensembl.org
+show database
+
+
+□SQLにおける型とテーブル
+> mysql -u anonymous -h asiadb.ensembl.org
+> \P less -SR#4
+> show databases;
+> connect homo_sapiens_vega_84_38;   #データベース（tableが入っている）
+> show tables                        #一個一個の表をtable
+> select * from gene limit 300;
+
+各カラムには型がついている。
+> describe gene   #geneというtableの各変数が格納されている型を表示
++-------------------------+-------------------------------------------------------------
+| Field                   | Type                                                        
++-------------------------+-------------------------------------------------------------
+| gene_id                 | int(10) unsigned           #unsigned(マイナスはない)                                  
+| biotype                 | varchar(40)                                                 
+| analysis_id             | smallint(5) unsigned                                        
+| seq_region_id           | int(10) unsigned                                            
+| seq_region_start        | int(10) unsigned                                            
+| seq_region_end          | int(10) unsigned                                            
+| seq_region_strand       | tinyint(2)                #小さいinteger                                  
+| display_xref_id         | int(10) unsigned                                            
+| source                  | varchar(40)                                                 
+| status                  | enum('KNOWN','NOVEL','PUTATIVE','PREDICTED','KNOWN_BY_PROJEC
+| description             | text       #任意の長さの文字列      #↑どれかである                                    
+| is_current              | tinyint(1)                                                  
+| canonical_transcript_id | int(10) unsigned                                            
+| stable_id               | varchar(128)                                                
+| version                 | smallint(5) unsigned                                        
+| created_date            | datetime                                                    
+| modified_date           | datetime                                                    
++-------------------------+--------------------------
+
+
+
+#標準の型があるが、データベースエンジンごとに違う動作をすることもある。
+mysql web 12章　Data Types
+Numeric Type            #Bool,tinyint,smallint,mediumint,Bigint,Decimal(10進数で覚える),float,double
+Date and Time Type      #DATE,DATETIME,TIMESTAMP,TIME,
+String Type             #VARCHAR(M)(最大はM,長さが可変のstring),BINARY(16進数の列として),TEXT
+                         ENUM(“”,””,””) 決められた選択肢の中から文字列を選んで格納
+
+Q.初級
+以下の単語の中から「表」のことを表していない単語を選べ。必要に応じてWeb検索してもよい。
+スキーマ
+
+以下の単語の中から「１行分のデータ」のことを表していない単語を選べ。必要に応じてWeb検索してもよい。
+構造体(struct)
+
+以下の単語の中から「１列」のことを表していない単語を選べ。
+柱(piller)
+
+Q.中級
+
+SQL の smallint unsigned 型に格納できる最大の整数は何か？
+-32768 	32767 (2^15 -1)
+0 	65535 (2^16 -1)
+
+SQL の int unsigned 型に格納できる最大の整数は 2 の [] 乗 - 1 である。
+INT 	4 	-2147483648 	2147483647 (2^31 -1)
+  	  		0 	4294967295 (2^32 -1)
+
+
+SQL の CHAR(12) 型は(ASCIIの場合) [] 文字のデータを保持できる。
+12
+
+SQL の VARCHAR(128) 型は（ASCIIの場合）
+最大で 128 文字を保持することができる。
+
+
+
+□Select文をつかってみよう
+アンサンブルのデータベース
+> mysql -u anonymous -h asiadb.ensembl.org
+> \P less -SR#4
+> show databases;
+> connect homo_sapiens_vega_84_38;
+> show tables;
+> describe prediction_exon;
+> select * from prediction_exon limit 100;
+
+> show databases;
+> select * from gene limit 100;   #カラム名の指定なし limit 何件
+> select gene_id,description from gene limit 100;
+> select gene_id,description from gene limit 10 offset 50;
+
+
+初級
+select name,chr,start_pos,end_pos,strand from gene limit 100 offset 100;
+
+中級
+順番に入力するだけ？
+
+上級
+SELECT name, end_pos - start_pos + 1 as len from gene; 
+
+
+
+□select文の中で集約関数を使ってみよう
+> select count(*) from gene limit 10;
+> show tables;
+> describe dna;
+> select length(sequence) from dna limit 10;  #配列の長さ
+> select sum(length(sequence)) from 
+> select avg(length(sequence)) from
+max,min
+
+> select 1 + 2;
+> select max(length(sequence)) - min(length(sequence));
+> select max(length(sequence)) - min(length(sequence)) as len_diff; (asでカラムの名前を作った)
+
+
+Q.
+以下のようなテーブル chromosomes がある。 length のもっとも大きな染色体（name）とその name を表示せよ。
+select name,max(length) from chromosomes;
+
+select sum(length) from chromosomes;

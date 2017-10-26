@@ -1,0 +1,2 @@
+id ~ oldid + year + misOrder + kubun + ken + shi + name + forcheck + med_cost_per1man1day + med_cost + general_beds + use_rate_general_beds + ave_stay_general  + ave_impatient_per1day + out_patient + patient + outpatient_rate + assets_building_100beds + doctors_100beds + nurses_100beds + pharmacist_100beds + DPCdummyH20 + fixedeffect
+

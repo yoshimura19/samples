@@ -1,0 +1,77 @@
+○ファイルを開く〜読み書き
+□ファイルを開く
+f = open(‘input.txt’, ‘r’)   #ファイル名（絶対パスor相対パス）
+# ‘r’ read; ‘w’ write; ‘r+’ read&write; 
+# man fopen    #で調べることができる(C言語と同じ)
+
+cat > input.txt   #ファイル作って書き込み Ctrl + Cで終了
+line = f.readline() # 1行を文字列として読み込む(改行文字も含まれる)
+lines2 = f.readlines() # 1行毎にファイル終端まで全て読む(改行文字も含まれる)
+
+for l in f.readlines():
+	print l,       #をつけないと改行まで読み込む "asdf\n"になっている
+			#または(“asfda\n”.strip())で対処
+			#print l.strip()   #strip:はぎ取る
+
+f.close            #１つのプログラムが開ける数が決まってるので閉じておく
+                   #なくてもプログラムが閉じると閉まる
+
+
+存在しないファイル
+try:
+
+except IOError, e:
+    print "I/O error", e        #(eでexceptionが説明される)
+    print "INFO: The input file was not found."
+    print "      please make sure that the input file exists."
+
+tryの中で例外を見つけたらexceptに飛ぶ
+
+with open(‘input.txt’, ‘r’) as f:
+	with open(‘input2.txt’, ‘r’) as f2:
+
+これで成功した場合のみ代入して続けてくれる．(python2.5以降)
+
+
+□ファイルの書き込み
+txtの中身を見る　>> 1ページづつless, 全部cat
+l.strip()
+
+with open("output.txt", "w") as f:
+    print >> f, "Hello"
+    print >> f, "World"
+
+
+
+
+□ファイルの書き込みと読み込み
+import sys
+
+if len(sys.argv) <= 2:
+    print >> sys.stderr, "Usage: linenumber.py <input file> <output file>"
+    sys.exit(1)
+
+
+input_file_name = sys.argv[1]
+output_file_name = sys.argv[2]
+
+line_count = 0
+with open(input_file_name, "r") as fin:    #inputを先にinputが開けないときは
+    with open(output_file_name, "w") as fout:   #outputを開いて欲しくない
+        for l in fin.readlines():
+            line_count += 1
+            #print line_count, ":" ,l.strip()
+            #print ("%4d:" % line_count), l.strip()
+            print >> fout, ("%4d:" % line_count), l.strip()
+
+
+
+□pythonのコメントとpydocの習慣
+def func(x):
+    """
+    function func(x) returns the squared x
+    """
+    return x * x
+
+
+>>> pydoc comment.py   #で仕様が読める

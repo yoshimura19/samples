@@ -1,0 +1,141 @@
+□コマンドライン講習会Day2
+• Linux は種類がたくさんありdistribution と⾔う
+• 個⼈利⽤で定評のある Ubuntu Linux
+
+
+昨⽇の簡単なまとめ２• コマンドラインインターフェースとは？ キーボードを打って⽂字が返ってくる様式• コマンドを打ったり答えを貰うウィンドウ（あるいはソフトウェア）をターミナルと呼ぶ• ターミナルの中で⼈間が⼊⼒したコマンドを解釈しているプログラムを「シェル」と呼ぶ• 各コマンドの使い⽅は man コマンドで調べる• ⽂字も数字で表されている。⽂字と数字の対応関係を「⽂字コード」と⾔う。• ⽂字コードは ASCII と UTF-8 だけとりあえず覚える• リダイレクトとパイプで組み合わせ処理
+
+
+user@dmz1$ clsfilt -v -t 4 -n 3 --db input.db query.txtプロンプト  プログラム名        引数(arguments)
+「プロンプト」という⾔葉はターミナル上のシェルに限らず、「⼈間の⼊⼒を待っている」ことを表現しているあらゆる⽂字列に対して使います。
+
+
+エスケープとクォート(escape & quote)
+• ファイル名にスペースが含まれる場合など、区切って欲しくないときにはどうする？ 1. エスケープする 2. クォートするuser@dmz1$ ls -al “Program Files”user@dmz1$ ls -al Program¥ Filesバックスラッシュ直後の特殊な意味を持つ⽂字（空⽩⽂字、クォート⽂字）などは特殊な意味として解釈しない意味になる。クォートは結構ルールが難しいので正確に理解するにはマニュアルを読んで下さい。
+
+
+ ls コマンド “-l” オプションは出⼒を⻑い形式の表⽰とする “-a” オプションは対象ファイルを「すべてのファイル」とする “-I” オプションは指定したパターンにマッチするファイルを無視する。user@dmz1$ ls -a -l -I abc
+
+
+• 任意個数の「無引数の短いオプション」と最⼤１個までの「１つの引数をとる短いオプション」は連結することがある。user@dmz1$ ls -a -l -duser@dmz1$ ls -ald同じ• 引数を取るオプションを連結するときには必ず最後user@dmz1$ perl –pe ‘s/abc/def’
+
+
+⻑いオプションは、‘--’+英字１⽂字以上であらわす。引数はある場合も無い場合もある。• 短いオプション向けにはあった連結ルールは無い。
+
+バージョン表⽰• “——version”, “—ver”, “-v”, “/VER”,“/V” などでバージョンを表⽰することが多い
+ヘルプ表⽰• “——help”, “—h” などでヘルプメッセージを表⽰することが多い
+•引数無しでプログラムを起動すると、簡単な使い⽅を表⽰して終了することが多い。
+• “プログラム名help” でプログラム全体に関するヘルプメッセージ、”プログラム名help サブコマンド名” でサブコマンドに関するヘルプメッセージが出るのが普通。
+
+
+SYNOPSIS の読み⽅
+ git cone [—-template=<template_directory>][-l][-s][—no-hardlinks]うんちゃら[ ] で囲われている項⽬は「省略してもよい」<> で囲われている項⽬は「省略できない必須の項⽬」を表している。
+　ln[OPTION]…[-T] TARGET LINK_NAME
+… （ドット三つ）で繰り返しを表すことが多い。A | B という形でA またはB を表すこともある。短いオプションは[-acfg] と書いて-a, -c, -f, -g およびその組み合わせを表すことも。
+
+
+ls コマンド• ls  #カレントディレクトリのファイルを表⽰• ls –l  #ファイル名だけではなくサイズとか⽇付とか他の情報も表⽰する• ls –a  #. とか .. という特殊ディレクトリも表⽰• ls –al  #なんかよく使う• ls –ald• ls –al /usr/local は /usr/local 以下のファイル⼀覧表⽰• ls –ald /usr/local は /usr/local というディレクトリを表⽰
+• ls –alR # -R を付けると再帰的に表⽰する• ls –alR /usr などとすると /usr 以下の任意に深い階層にあるディレクトリ全てに対して ls –al を実⾏したことになる。• ls –G (Mac など BSD 系),ls –-color=always # ⾊を付けて表⽰
+• ls –alL# -L を付けるとシンボリックリンクの先を表⽰# シンボリックリンクは ln コマンドの項で改めて説明する
+
+ちょっと脱線:
+TAB 補完 (TAB completion)• 絶対パスとか⻑いファイル名は全部⼿打ちすると⼤変。• 途中までファイル名を打って TAB キーを押すとコンピューターが勝⼿に残りを⼊⼒してくれる
+> veryveryverylongfilename.txt
+> v  でTABキーを押す
+TABキーを押すが、gr で始まるファイルが複数あるのでベルが鳴る。しつこくもう⼀度 TAB キーを押すと候補が出るので続きを⾃分で打つ。
+
+
+pwd コマンド pwd #カレントディレクトリを表⽰する     #echo $PWD としても同じ
+
+
+less コマンド less abc.txt  #abc.txt を閲覧する #カーソルキーで上下移動 #q で終了 #他のキーは ‘h’ キーを押して表⽰される説明を読んで使い⽅を覚える。説明終了は q• ls –al | less   #ls –al の結果を less でスクロールしながら表⽰                  #このようにパイプと組み合わせること多し。• ls –alG | less –R  #⾊付きのままスクロールしたい。                     #Linux の⼈は –G のかわりに --color=always昔は less より低機能な more というコマンドを使っていた。less の⽅が more より⾼機能。
+
+
+echo コマンド echo Hello  #Hello と表⽰する
+             #最後に改⾏したくないときには –n オプションを付ける。• echo コマンドは引数を表⽰するだけだが、シェルの前処理後の引数を表⽰するときに便利• ⼝述のシェルスクリプトでも便利
+
+
+cp コマンド cp abc.txt def.txt  #（カレントディレクトリの）abc.txt を（カレントディレクトリの）def.txt にコピーする  
+ cp abc.txt def.txt ghi.txt /tmp  #（カレントディレクトリの）abc.txt, def.txt, ghi.txtの３つのファイルを /tmp というディレクトリにそれぞれ同名でコピーする
+
+
+ワイルドカードの置換• 「シェル」の前処理の⼀種• “*” を含むパラメータは “*” の部分を任意の⽂字列に置換してマッチするファイル名に置き換えられる。• 複数のファイルがマッチした場合にはスペースで区切って全部渡される
+> ls
+a001 a002 a003 b01 b02
+> echo *00*
+a001 a002 a003
+
+• “?” は任意の⼀⽂字にマッチする 
+• “**” は任意の深いパスにマッチする。“abc/def” とか “a/b/c/d/e/f/g/h/I” とか。
+
+
+cp コマンド• cp *.txt ~/text-save• カレントディレクトリに存在する、末尾が “.txt” で終わるファイル名のファイルを全て ~/text-save ディレクトリにコピーする
+
+mv• mv abc.txt /tmp     #カレントディレクトリの abc.txt という名前のファイルを /tmp ディレクトリに移動する。• mv abc.txt def.txt  #abc.txt という名前のファイルを改名して def.txt に変更する。• このとき def.txt が元からあれば消える。
+• mv –i abc.txt def.txt  #abc.txt を def.txt に改名する。
+
+
+cd   #カレントディレクトリをホームディレクトリとする
+cd /usr/bin   #絶対パスで移動
+• cd –　　　　　#カレントディレクトリを直前の cd を実⾏する前のディレクトリとする
+
+
+
+catcat abc.txt           #abc.txt の中⾝をターミナルに表⽰するcat foo.txt bar.txt   #foo.txt と bar.txt の中⾝をそれぞれこの順にターミナルに表⽰するcat a0*.txt > a_all.txt   #a0 ではじまり .txt で終わるカレントディレクトリのファイル全てを連結して結果を a_all.txt に保存する
+
+
+curl• curl http://togows.org/entry/nucleotide/J00231   #指定した URL にアクセスして内容をターミナルに表⽰する                                                   #⻑いので | less 推奨。
+• curl http://togows.org/entry/nucleotide/J00231 > J00231.genbank   #リダイレクトを利⽤してファイルに保存
+   #同じことをする ‒O オプションがあるので普通はそちらを使う。
+
+headls –al /usr/bin | head  #ls –al /usr/bin の結果が⻑すぎるので先頭１０⾏だけターミナルに表⽰するls –al /usr/bin | head -5  #１０⾏でも⻑いので５⾏にしてみた
+
+taills –al /usr/bin| tail  #末尾１０⾏を表⽰
+
+
+grepgrep JOURNAL J00231  #J00231 というファイルの中で “JOURNAL” という⽂字列を含む⾏だけを表⽰cat J00231 | grep JOURNAL
+  #パイプと組み合わせて使うこともできるgrep –i journal J00231   #⼤⽂字⼩⽂字を無視するときは –I オプション
+
+
+less –SR hg38[TAB] として –S –R オプションを付加し、折り返しを禁⽌して⽮印キーで左右にスクロールできるようにしてみましょう。
+
+脱線：sed と awk があれば⽂字列処理はなんでもできる• この２つであまりにもなんでもできるので、「sed, awk して船、⼭に登る」とか昔はジョークで⾔われていたものじゃった・・・（詠み⼈知らず）
+• それぞれ１冊の本になるぐらい奥深い.現代ならその労⼒で Python とか Ruby を覚えたい。
+
+
+脱線：追加のリダイレクト
+　> ではなく >> とするとファイルに追記できる
+> cat.txt
+a
+> echo b > a.txt
+> cat a.txt
+b
+> echo >> a.txt
+> cat a.txt
+a
+b
+
+
+正規表現の本
+  #なんでもいいですが１冊買いましょう。⼀回覚えたら多分３０年使えます。
+
+
+gzip, gunzip, gzcat
+  gzip a.fasta #a.fastaというファイルを圧縮し、a.fasta.gz に書き込む.元の a.fasta は削除する。  gunzip a.fasta.gz #a.fasta.gz というファイルを伸張（解凍）し、a.fasta に書き込む。a.fasta.gz は削除する。  gzcat a.fasta.gz
+ #a.fasta.gz を伸張（解凍）しつつ、結果をターミナルに表⽰する。a.fasta.gz が削除されたりはしない。パイプなどと組み合わせて使う。
+
+bzip2, bunzip2, bzcat
+
+unzip, zip unzip analysis_file.zip  #analysis_file.zip を解凍する。 #zip ファイルを作りたい⼈は zip コマンドで。 #UNIX/Linux/BSD 界隈では tar を普通使います。 #Windows の⼈達との受け渡し⽤。
+
+
+tar tar c a.txt b.txt c.txt > abc.tar   #a.txt, b.txt, c.txt をまとめた tar 書庫（tar アーカイブ） abc.tar を作成します。　tar c a.txt b.txt c.txt | gzip > abc.tar.gz　　#gzip などで圧縮するのが王道パターン。  tar cfz abc.tar.gz a.txt b.txt c.txt   #上の省略記法。使えないマシンもたまにある。  tar cvfz abc.tar.gz a.txt b.txt c.txt   #v オプションを加えたこの形を丸暗記しよう。   #gzip ではなく bzip2 を使うときには cvfz を cvfj に。
+
+tarballを解答する
+tar.gzの場合
+ % tar xvfz samtools-0.1.19.tar.gz
+tar.bz2の場合
+% tar xvfj samtools-…
+
+
+p.90からもあとからメモろう…(力つきなう)

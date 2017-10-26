@@ -1,0 +1,37 @@
+□prob1(1点
+(a) function to simulate moment			0.5
+(b) apply (a) to k = 2,4,6,8 n = 500,000	0.5
+
+
+□prob2(1点
+Wilcoxon singed-rank test, slide p.36
+
+
+□prob3(1点
+equal variance:two-sample t-test
+(a) box plot by gender				0.2
+ラベルなし -0.1
+(b) check equal variance 5% and 10%(rejected) 	0.3
+sample variancesなしで0.1点減点
+検定結果のコメント0.2点
+(c) t-test by ’t.test’				0.2
+(d) implement t-test by basic operation		0.3
+自由度, p-value, t-statistics １つなしで0.1点減点
+
+### HW2 採点ガイドライン
+
+- 大体、前回と同じ感じでお願いします。１問１点です。
+- 問題の性格上減点主義になってしまって楽しくないので
+　「素晴らしいコードにはボーナスを」との希望が学生からありました。
+　特に良いコードがあれば気に入ったものを１〜２点教えてください。
+　(後でこちらで加点します。)
+
+
+### 伝達事項（個別の問題）
+Question 3(d)ですが添付ファイルの下線部箇所が、
+(正)"Implement the same t-test as (c)"　であるべきところ、
+先週土曜日まで
+（誤）"Implement the same t-test as (b)"
+となっておりました。学生には通知済みです。
+文脈から(b)として解いている人はいないと思いますが、
+いた場合は正しく解けていれば満点としてして構いません。

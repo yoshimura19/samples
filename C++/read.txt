@@ -1,0 +1,4 @@
+C++14のオプション g++ -std=c++14 cpp14_sample.cpp
+
+kota$ g++ -v
+gcc version 5.4.0 (MacPorts gcc5 5.4.0_1) 

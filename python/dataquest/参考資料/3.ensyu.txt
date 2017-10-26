@@ -1,0 +1,82 @@
+□文字列操作
+問題はいくつ？とたずねつつ文字列を書かせる
+
+>>> s = “x” * 10
+>>> s
+“xxxxxxxxxx”
+>>> s[10)
+ERR
+
+
+>>> s = "Mississippi"
+>>> a = s[2:-2]
+>>> a
+'ssissip'
+
+
+>>> s = "Well done!"
+>>> a = s[1:2]
+>>> a
+
+
+
+s = "ABCXYZ"
+>>> a = s[-4:-2]
+>>> a
+'CX'
+
+
+>>> s = "K" + """
+  abc
+  def""" + "R"
+>>> s
+'K\n  abc\n  defR'
+>>> len(s)
+14
+
+
+>>> s = "Mississippi"
+>>> a = s[2:1000]
+ssissippi
+
+>>> a = "ABC,DEF,GHI".split(",")
+>>> a
+['ABC', 'DEF', 'GHI']
+
+
+□Python における non-POD 型の間接参照
+a = [1, [2], 3]
+b = a[1]
+b = 99
+print a
+[2]
+
+#下２つの違いに注意！
+>>> t = [22]
+>>> s = [1, t, t, 4]
+>>> v = s[2]
+>>> v[0] = 99
+>>> print s
+[1, [99], [99], 4]
+
+>>> t = [22]
+>>> s = [1, t, t, 4]
+>>> v = s[2]
+>>> v = 99
+>>> print s
+[1, [22], [22], 4]
+
+
+中級
+a = [0] * 10
+for i in range(10):
+  a[i] = [i]
+for j in a:
+  j[0] += 10
+
+aは
+[[10], [11], [12], [13], [14], [15], [16], [17], [18], [19]]
+
+
+□関数を作る
+def calc_tax(price):

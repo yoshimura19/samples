@@ -1,0 +1,96 @@
+setwd("~/Documents2/TA/16後期/statistical_computing/HW1")
+rm(list=ls())
+plot.new()
+
+### Question 1
+# (a)
+X <- 0.01 * (0:1000) # 0 <= X <= 1 with increments 0.01	
+Y <- sqrt((X^3 + 3*X^2 + 1)/(X^4+5*X^3+7*X+9))		
+
+jpeg("Fig1a.jpg")
+plot(X,Y,type="l")
+dev.off()
+quartz 
+2 
+dev.off() # end of jpeg file
+
+# (b)
+order(Y)[1001] # show where is the largest observation in Y
+[1] 170
+Y[170]
+[1] 0.5205625
+# maximizer x=1.69 (170th observation of X)
+# maximum = f(1.69) = 0.5205625
+
+### Question 2
+# (a)
+set.seed(1) # set a seed for random numbers
+X <- rnorm(1000) # 1000 standard normal random numbers
+sd(X)
+[1] 1.034916
+
+# (b)
+sort(X)[100] # 100th smallest nubmer in X
+
+# (c)
+# the 10th percentile of standard normal distribution
+# is about -1.28 since Pr(X < -1.28) = 0.1003.
+# -1.34413 in (b) is close to -1.28.
+
+
+### Question 3
+
+# (a)(b)
+A <- rbind(c(0.979,0.144),c(0.147,-0.999))
+A2 <- A %*% A # A^2
+A4 <- A2 %*% A2
+A8 <- A4 %*% A4 # A^8
+A16 <- A8 %*% A8 
+A32 <- A16 %*% A16 # A^{32}
+A64 <- A32 %*% A32 
+A128 <- A64 %*% A64
+A256 <- A128 %*% A128
+A512 <- A256 %*% A256
+A1024 <- A512 %*% A512 # A^{1024}
+
+A2
+[,1]      [,2]
+[1,]  0.979609 -0.002880
+[2,] -0.002940  1.019169
+A8
+[,1]       [,2]
+[1,]  0.92094709 -0.0115035
+[2,] -0.01174315  1.0789604
+A32
+[,1]        [,2]
+[1,]  0.72011695 -0.04630104
+[2,] -0.04726564  1.35611313
+A1024
+[,1]      [,2]
+[1,]    98.7977 -1336.554
+[2,] -1364.3989 18457.853
+
+# (c)
+A1024 %*% solve(A32) %*% A8 # A^1000 = A^1024 (A^32)^{-1} A^8
+[,1]      [,2]
+[1,]    78.47005 -1061.558
+[2,] -1083.67339 14660.143
+
+# (d)
+eigen(A)
+$values
+[1] -1.0096444  0.9896444
+
+$vectors
+[,1]       [,2]
+[1,] -0.07222204 0.99727908
+[2,]  0.99738858 0.07371857
+
+# (e)
+lam <- eigen(A)$values
+X  <- eigen(A)$vectors
+X %*% diag(lam^1000) %*% solve(X) 
+>	# A^1000 = X diag(lam[1]^1000, lam[2]^1000) X^{-1}
+    [,1]      [,2]
+[1,]    78.47005 -1061.558
+[2,] -1083.67339 14660.143

@@ -1,0 +1,50 @@
+% Bellman's Equation
+% slide p28
+
+a = (0:0.05:20)';
+n = length(a);
+
+%グローバル変数設定
+beta = 0.99; theta = 2;
+r = 0.04; w = 1;
+eps = 0.0001;
+MaxIt = 10000;   %反復数
+
+%変数
+V = zeros(n,1);   % initial guess
+Vnew = zeros(n,1); %更新用 value-function
+policy = zeros(n,1); % policy用 列ベクトル
+
+c = (1+r)*a*ones(1,n) + w*ones(n,n)-ones(n,1)*a';
+R = c.^(1-theta)/(1-theta)
+R(c<0) = -10000000;
+
+%ベルマン方程式iteration
+for j = 1:MaxIt
+	RHS = R + beta*ones(n,1)*V';
+	[Vnew, policy] = max(RHS,[],2);  %2だと行を探す
+	
+	if ( max(abs(Vnew-V)) < eps)
+		disp(['coverged in iteration ' ,num2str(j)])
+		break
+	end
+	V = Vnew;
+end
+
+subplot(1,2,1)
+plot(a,V)	
+title('Value function')	
+xlabel('Current	asset')	
+ylabel('Value')	
+subplot(1,2,2)	
+plot(a,policy(a))	
+title('Policy function')	
+xlabel('Current	asset')	
+ylabel('Next period	asset')
+
+
+
+
+
+
+
